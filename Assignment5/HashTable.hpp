@@ -26,7 +26,7 @@ private:
     public:
     
     // Constructs a new HashTable and initializes all head nodes to 0
-    HashTable(int _size = 13){
+    HashTable(int _size = 1000){
         table = new hashNode<T>*[_size];
         size = _size;
         itemCount = 0;
@@ -86,10 +86,12 @@ private:
         
         itemCount++;
         loadFactor = ((double) itemCount) / size;
+        /* Optional: rehashing, load balancing
         if (loadFactor > .75){
-            rehash();
+            //rehash();
             loadFactor = ((double) itemCount) / size;
         }
+         */
     }
     
     // Searches for a given item, returning the original if not found
@@ -140,8 +142,8 @@ private:
             cout << "Item could not be deleted" << endl; // if it is not deleted inside the loop
         }
     }
-    
-    // Resizes the HashTable and repopulates it with the re-distributed nodes
+    /*
+    // Optional: Resizes the HashTable and repopulates it with the re-distributed nodes
     void rehash(){
         int oldSize = size;
         size *= 3;
@@ -167,7 +169,7 @@ private:
 
         delete[] oldTable;
     }
-
+     */
     // returns a hash code for a given item
     int hash(T& item){
         int hashCode = item();

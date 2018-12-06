@@ -1,4 +1,4 @@
-//  CS 300 Assignment 4 due 11/21
+//  CS 300 Assignment 5 due 12/5
 //  Jena Lovejoy
 //  BinarySearchTree.hpp creates a BST and provides functionality like search, delete, and insert
 

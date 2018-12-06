@@ -32,6 +32,7 @@ public:
     }
     
     Product& operator=(Product &other){
+
         UPCCode = other.UPCCode;
         info = other.info;
         return *this;
@@ -45,7 +46,7 @@ public:
     }
     
     friend bool operator==(const Product &A, const Product &B){
-        return (A.UPCCode).compare(B.UPCCode) == 0;
+        return A.UPCCode.compare(B.UPCCode) == 0;
         // less than, under 0
     }
     friend bool operator!=(const Product &A, const Product &B){
@@ -66,9 +67,9 @@ public:
     
     int operator()(){
         int sum = 0;
-        int length = (int)(UPCCode).length();
+        int length = (int) UPCCode.length();
         for (int i = 0; i < length; i++){
-            sum += int(UPCCode[i]);
+            sum += (int) UPCCode[i];
         }
         return sum;
     }

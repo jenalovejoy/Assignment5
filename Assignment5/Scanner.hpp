@@ -1,10 +1,5 @@
-//
-//  Scanner.hpp
-//  Assignment5
-//
-//  Created by Jena Lovejoy on 12/5/18.
-//  Copyright © 2018 Jena Lovejoy. All rights reserved.
-//
+//  CS 300 Assignment 5 due 12/5
+//  Jena Lovejoy
 
 #ifndef Scanner_hpp
 #define Scanner_hpp

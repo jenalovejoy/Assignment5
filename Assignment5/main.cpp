@@ -1,10 +1,6 @@
-//
-//  main.cpp
-//  Assignment5
-//
-//  Created by Jena Lovejoy on 12/2/18.
-//  Copyright © 2018 Jena Lovejoy. All rights reserved.
-//
+//  CS 300 Assignment 5 due 12/5
+//  Jena Lovejoy
+//  This client searches three forms of data structures and outputs the search times
 
 #include "Product.hpp"
 #include "BSTScanner.hpp"
@@ -74,8 +70,6 @@ int main(int argc, const char * argv[]) {
     HashTable<Product> hashTable;
     scanner = new HashScanner<Product>(hashTable);
     scan(scanner, fileName);
-
-    // hashTable.search(<#Product &item#>)
     
     string exampleCodes[] = {"8717644525098", "71000", "459136", "41570059012", "60410047613", "00000", "725177540363"};
     // Item numbers 680, 76407, 660896, 67170, 1035244, non-existant, and 1
@@ -115,45 +109,12 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    // double arrayAverage = ((double) timeSum / (numExamples * iterations)) * timeScale;
     double arrayAverage = ((double) arrayTimeSum / (numExamples * iterations)) * timeScale;
     double bstAverage = ((double) bstTimeSum / (numExamples * iterations)) * timeScale;
     double hashAverage = ((double) hashTimeSum / (numExamples * iterations)) * timeScale;
 
-    cout << "average search time: " << endl;
+    cout << "average search times: " << endl;
     cout << "array: " << arrayAverage << endl;
     cout << "bst: " << bstAverage << endl;
     cout << "hash table: " << hashAverage << endl;
-    return 0;
-
-}
-    
-
-
-
-
-/*
- HashTable<Product> words;
- 
- Product *a = new Product("12345","French");
- Product *b = new Product("12435","Dutch");
- Product *c = new Product("34521","abracadabra");
- Product *d = new Product("789","balloon");
- Product *e = new Product("987","pedagogy");
- Product *f = new Product("111","ballroom");
- Product *g = new Product("222","kick");
- Product *h = new Product("465","pick");
- Product *i = new Product("546","almond");
- Product *j = new Product("123","butter");
- 
- words.insert(*a);
- words.insert(*b);
- words.insert(*c);
- words.insert(*d);
- words.insert(*e);
- words.insert(*f);
- words.insert(*g);
- words.insert(*h);
- words.insert(*i);
- 
- */
+ }

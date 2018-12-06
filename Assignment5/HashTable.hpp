@@ -1,53 +1,88 @@
-//
-//  HashTable.hpp
-//  Assignment5
-//
-//  Created by Jena Lovejoy on 12/5/18.
-//  Copyright © 2018 Jena Lovejoy. All rights reserved.
-//
+//  CS 300 Assignment 5 due 12/5
+//  Jena Lovejoy
+//  HashTable implementes a hash data structure with separate chaining
 
 #ifndef HashTable_hpp
 #define HashTable_hpp
 
 #include <stdio.h>
-#include "LinkedList.hpp"
 using namespace std;
 
+template <class T>
+struct hashNode { // individual nodes in the chain
+    T data;
+    hashNode<T> *next;
+};
 
 template <class T>
 class HashTable {
-    // friend class LinkedList<T>;
-    LinkedList<T>** table;
+    hashNode<T>** table;
+    
+private:
     int size;
     int itemCount;
     double loadFactor;
     
     public:
+    
+    // Constructs a new HashTable and initializes all head nodes to 0
     HashTable(int _size = 13){
-        table = new LinkedList<T>*[_size];
+        table = new hashNode<T>*[_size];
         size = _size;
         itemCount = 0;
-    }
-
-    void makeEmpty(){
+        
         for (int i = 0; i < size; i++){
-            table[i].destroyList();
+            table[i] = NULL;
         }
     }
     
+    ~HashTable(){}
+    
+    // Assignment operator
+    const HashTable & operator=( const HashTable & rhs ){
+        makeEmpty();
+        for (int i = 0; i < rhs.size; i++){
+            hashNode<T> *p = rhs.table[i];
+            while (p != NULL){
+                table[i] = rhs.table[i];
+                p = p->next;
+            }
+        }
+        return *this;
+    }
+    
+    // Copy Constructor
+    HashTable(HashTable<T> &table){
+        HashTable(table.size);
+    }
+
+    // Clears the HashTable
+    void makeEmpty(){
+        for (int i = 0; i < size; i++){
+            hashNode<T> *p = table[i];
+            while (table[i] != NULL){
+                p = table[i];
+                table[i] = table[i]->next;
+                delete p;
+            }
+        }
+    }
+    
+    // inserts a new node first in the list
     void insert(T& item){
         int index = hash(item);
-        // node<T> *hashItem;
-        // hashItem->data = item;
-        if (table[index] == NULL){
-            cout << "LL added" << endl;
-            LinkedList<T>* newList = new LinkedList<T>;
-            cout << newList -> head;
-            table[index] = newList;
-        }
-        cout << table[index] << endl;
+        hashNode<T> *newNode = new hashNode<T>;
+        newNode->data = item;
         
-        table[index]->insertFirst(item);
+        if (table[index] == NULL){
+            table[index] = newNode;
+            newNode->next = NULL;
+        } else {
+            hashNode<T> *temp = table[index];
+            table[index] = newNode;
+            newNode->next = temp;
+        }
+        
         itemCount++;
         loadFactor = ((double) itemCount) / size;
         if (loadFactor > .75){
@@ -56,65 +91,88 @@ class HashTable {
         }
     }
     
+    // Searches for a given item, returning the original if not found
     T& search(T& item){
         int index = hash(item);
-        return table[index]->search(item);
+        hashNode<T> *temp = table[index];
+        while (temp != NULL){
+            if (temp->data == item){
+                return temp->data;
+            }
+            temp = temp->next;
+        }
+        return item;
     }
     
+    // Deletes an item from the HashTable
     void remove(T& item){
-        int index = hash(item, size);
-        table[index].deleteNode(item);
-        
-    }
-    
-    void rehash(){
-        cout << "hashy boy" << endl;
-        int oldSize = size;
-        size = size * 3;
-        LinkedList<T>** newList = new LinkedList<T>*[size];
-        for (int i = 0; i < oldSize; i++){
-            if (table[i] != NULL){
-                node<T> *temp = table[i]->head;
-                while (temp != NULL){
-                    int index = hash(temp->data);
-                    if (newList[index] == NULL){
-                        table[index] = new LinkedList<T>;
+        int index = hash(item);
+        if (table[index] == NULL){
+            cout << "Item could not be deleted" << endl;
+            return;
+        } else if (table[index]->data == item){ // first item
+            hashNode<T> *temp = table[index];
+            table[index] = table[index]->next;
+            delete temp;
+            itemCount--;
+            
+        } else {
+            hashNode<T> *curr = table[index];
+            hashNode<T> *prev = NULL;
+            while (curr != NULL){
+                if(curr->data == item && curr->next == NULL){ // last item
+                    if (curr->next == NULL){
+                        prev = NULL;
+                    } else {
+                        prev = curr->next;
                     }
-                    newList[index]->insertFirst(temp->data);
-                    temp = temp->next;
+                    
+                    delete curr;
+                    itemCount--;
+                    return;
+        
+                } else {
+                    prev = curr;
+                    curr = curr->next;
                 }
             }
-            
+            cout << "Item could not be deleted" << endl; // if it is not deleted inside the loop
         }
-        
-        LinkedList<T>** oldList = table;
-        table = newList;
-        delete[] oldList;
-    }
-    /*
-    int hash(const string &key, int tableSize){
-        int sum = 0;
-        int length = (int)(key).length();
-        for (int i = 0; i < length; i++){
-            sum += int(key[i]);
-        }
-        return sum % tableSize;
     }
     
-    int hash(int key, int tableSize){
-        return key % tableSize;
+    // Resizes the HashTable and repopulates it with the re-distributed nodes
+    void rehash(){
+        int oldSize = size;
+        size *= 3;
+        
+        hashNode<T>** newTable;
+        newTable = new hashNode<T>*[size];
+        for (int i = 0; i < size; i++){
+            newTable[i] = NULL;
+        }
+        hashNode<T>** oldTable = table;
+        table = newTable;
+        itemCount = 0;
+         
+        
+        for (int i = 0; i < oldSize; i++){
+            hashNode<T> *temp = oldTable[i];
+            
+            while (temp != NULL){
+                insert(temp->data);
+                temp = temp->next;
+            }
+        }
+
+        delete[] oldTable;
     }
-    */
+
+    // returns a hash code for a given item
     int hash(T& item){
         int hashCode = item();
         return hashCode % size;
     }
-    // const HashTable & operator=( const HashTable & rhs );
     
 };
-
-
-
-
 
 #endif /* HashTable_hpp */

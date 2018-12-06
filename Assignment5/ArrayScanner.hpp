@@ -1,5 +1,7 @@
 //  CS 300 Assignment 5 due 12/5
 //  Jena Lovejoy
+//  ArrayScanner.hpp creates a scanner to be used to populate the Array database
+
 
 #ifndef ArrayScanner_hpp
 #define ArrayScanner_hpp
@@ -21,8 +23,8 @@ public:
     }
     
     void scan(T& product){
-        database[index] = product; // find the end
-        index++;
+        database[index] = product;
+        index++; // keep track of the end
     }
     
     void setDatabase(T* _database){

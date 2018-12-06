@@ -1,5 +1,6 @@
 //  CS 300 Assignment 5 due 12/5
 //  Jena Lovejoy
+//  HashScanner.hpp creates a scanner to be used to populate the HashTable database
 
 #ifndef HashScanner_hpp
 #define HashScanner_hpp

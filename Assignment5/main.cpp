@@ -15,10 +15,11 @@ using namespace std;
 
 const double timeScale = 1000.0 / CLOCKS_PER_SEC;
 
-int itemCount;
-bool counted = false;
+int itemCount; // total items in dataset
+bool counted = false; // if the items have been counted
 
-void scan(Scanner<Product>* scanner, const char * fileName) { //polymorphic function
+// Populates the structures with product information
+void scan(Scanner<Product>* scanner, const char * fileName) {
 
     ifstream fileStream;
     fileStream.open(fileName);
@@ -45,7 +46,7 @@ void scan(Scanner<Product>* scanner, const char * fileName) { //polymorphic func
     }
 }
 
-// Given a dummy Product, returns the full Product if found, and the dummy if not
+// Given a dummy Product, searches the array and returns the full Product if found, and the dummy if not
 Product& search(Product *codeArray, Product &code){
     
     for (int i = 0; i <= itemCount; i++){
@@ -59,18 +60,22 @@ Product& search(Product *codeArray, Product &code){
 int main(int argc, const char * argv[]) {
     const char * fileName = argv[1];
     
+    // Loading the BST with data
     BinarySearchTree<Product> bst;
     Scanner<Product> *scanner = new BSTScanner<Product>(bst);
     scan(scanner, fileName);
     
+    // Loading the array with data
     Product *array = new Product[1050000];
     scanner = new ArrayScanner<Product>(array);
     scan(scanner, fileName);
     
+    // Loading the hash table with data
     HashTable<Product> hashTable;
     scanner = new HashScanner<Product>(hashTable);
     scan(scanner, fileName);
     
+    // running tests and gathering time data
     string exampleCodes[] = {"8717644525098", "71000", "459136", "41570059012", "60410047613", "00000", "725177540363"};
     // Item numbers 680, 76407, 660896, 67170, 1035244, non-existant, and 1
     int iterations = 100;

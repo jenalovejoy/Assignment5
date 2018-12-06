@@ -1,5 +1,6 @@
 //  CS 300 Assignment 5 due 12/5
 //  Jena Lovejoy
+//  BSTScanner.hpp creates a scanner to be used to populate the BST database
 
 #ifndef BSTScanner_hpp
 #define BSTScanner_hpp

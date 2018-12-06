@@ -36,6 +36,7 @@ private:
         }
     }
     
+    // Destructor
     ~HashTable(){}
     
     // Assignment operator
@@ -120,10 +121,10 @@ private:
             hashNode<T> *curr = table[index];
             hashNode<T> *prev = NULL;
             while (curr != NULL){
-                if(curr->data == item && curr->next == NULL){ // last item
-                    if (curr->next == NULL){
+                if(curr->data == item){
+                    if (curr->next == NULL){ // last item
                         prev = NULL;
-                    } else {
+                    } else { // middle item
                         prev = curr->next;
                     }
                     
@@ -145,19 +146,19 @@ private:
         int oldSize = size;
         size *= 3;
         
+        // Creates a new table, initializes it all to null
         hashNode<T>** newTable;
         newTable = new hashNode<T>*[size];
         for (int i = 0; i < size; i++){
             newTable[i] = NULL;
         }
         hashNode<T>** oldTable = table;
-        table = newTable;
-        itemCount = 0;
-         
+        table = newTable; // switches old with new
+        itemCount = 0; // resets item count to be updates when re-populating
         
+        // Repopulates the new table, rehashing the items
         for (int i = 0; i < oldSize; i++){
             hashNode<T> *temp = oldTable[i];
-            
             while (temp != NULL){
                 insert(temp->data);
                 temp = temp->next;
